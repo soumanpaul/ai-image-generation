@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @default(cuid()) @id
+  username String
+  profilePicture String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Model {
+  id String @id @default(cuid())
+  name String
+  type ModelTypeEnum
+  age Int
+  ethinicity EthenecityEnum
+  userId String
+  eyeColor EyeColor
+  bald Boolean
+  traningImages TraningImages[]
+  outputImages OutputImages[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TraningImages {
+  id  String @id @default(cuid())
+  imageUrls String
+  modelId String
+  model Model @relation(fields: [modelId], references: [id])
+}
+
+model OutputImages {
+  id String @id @default(cuid())
+  imageUrls String
+  modelId String
+  userId String
+  model Model @relation(fields: [modelId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Packs {
+  id String @id @default(cuid())
+  name String
+  packPrompts PackPrompts[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PackPrompts {
+  id String @id @default(cuid())
+  prompt String
+  packId String
+  pack Packs @relation(fields: [packId], references: [id])
+}
+
+
+
+enum ModelTypeEnum {
+  Man
+  Woman
+  Others
+}
+
+enum EthenecityEnum {
+  White
+  Black
+  Asian
+  American
+  EastAsian
+  SouthEastAsian
+  SouthAsian
+  MiddleEastern
+  Pacific
+  Hispanic
+}
+
+enum EyeColor {
+  Brown
+  Blue
+  Hazel
+  Gray
+}
