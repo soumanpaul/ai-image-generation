@@ -41,7 +41,15 @@ const data =  await prismaClient.model.create({
 })
 
 app.post("/ai/generate", (req, res) => {
-     
+    const parsedBody = GenerateImage.safeParse(req.body);
+
+    if(!parsedBody.success) {
+        res.status(411).json({
+            message: "Input Incorrect"
+        })
+        return
+    }
+    res.send("AI generate");
 })
 
 app.post("/pack/generate", (req, res) => {
